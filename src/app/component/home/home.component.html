@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="row">
+    <div class="col-3">
+      <!-- Profile card -->
+      <div class="card mt-5">
+        <div class="card-body p-5 d-flex justify-content-center align-items-center" *ngIf="user">
+          <div>
+            <h5 class="card-title">{{user.fname}} {{user.lname}}</h5>
+            <a (click)="logout()" class="btn btn-primary btn-sm" role="button" style="width: 100px; height: 40px;">
+              <span class="" style="font-size: 20px;">LogOut</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Profile card -->
+
+      <!-- Login Time card -->
+      <div class="card mt-5">
+        <div class="card-body" *ngIf="user">
+          <strong>Login Time:</strong>
+          <div *ngFor="let time of user.loginTime.slice().reverse().slice(0,10)">
+            {{ time | date:'medium' }}
+          </div>
+        </div>
+      </div>
+      <!-- Login Time card -->
+    </div>
+
+    <div class="col-8">
+      <!-- Edit Profile card -->
+      <div class="card mt-5 h-100" *ngIf="user">
+        <h3> User Info</h3>
+        <h5> First Name</h5>
+        {{user.fname}}
+        <h5> Last Name</h5>
+        {{user.lname}}
+        <h5> Email Address</h5>
+        {{user.email}}
+        <h5>Phone number</h5>
+        {{user.phone}}
+        <a class="btn btn-primary btn-sm w-25"> </a>
+      </div>
+      <!-- Edit Profile card -->
+    </div>
+  </div>
+</div>

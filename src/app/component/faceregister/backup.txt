@@ -1,0 +1,89 @@
+import { Component,ViewChild,ElementRef,OnInit,OnDestroy } from '@angular/core';
+import { nets, detectAllFaces, TinyFaceDetectorOptions, resizeResults, createCanvasFromMedia, draw } from 'face-api.js';
+import { matchDimensions as matchCanvasDimensions } from 'face-api.js';
+import * as  tf   from '@tensorflow/tfjs'
+import '@tensorflow/tfjs-backend-webgl';
+//import { RecognitionService } from 'src/app/_service/recognition.service';
+
+@Component({
+  selector: 'app-webcam',
+  templateUrl: './webcam.component.html',
+  styleUrls: ['./webcam.component.css']
+})
+export class WebcamComponent implements OnInit{
+
+  WIDTH = 440;
+HEIGHT = 280;
+@ViewChild('video',{ static: true })
+public video?: ElementRef;
+@ViewChild('canvas',{ static: true })
+public canvasRef?: ElementRef;
+constructor(private elRef: ElementRef) {}
+stream: any;
+detection: any;
+resizedDetections: any;
+canvas: any;
+canvasEl: any;
+displaySize: any;
+videoInput: any;
+
+async ngOnInit() {
+  Promise.all([
+  nets.tinyFaceDetector.loadFromUri('/assets/models'),
+  nets.faceLandmark68Net.loadFromUri('/assets/models'),
+  nets.faceRecognitionNet.loadFromUri('/assets/models'),
+  nets.faceExpressionNet.loadFromUri('/assets/models')])
+  .then(() => this.startVideo());
+  
+  }
+  // startVideo() {
+  //   this.videoInput = this.video?.nativeElement;
+  //   navigator.getUserMedia(
+  //     { video: {}, audio: false },
+  //     (stream) => (this.videoInput.srcObject = stream),
+  //     (err) => console.log(err)
+  //   );
+  //   this.detectFaces();
+  //   }
+startVideo() {
+    tf.setBackend('webgl');
+    this.videoInput = this.video?.nativeElement;
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+      .then((stream) => {
+        this.videoInput.srcObject = stream;
+        this.stream = stream;
+      })
+      .catch((err) => console.log(err));
+      //this.recofintionService.detectFace()
+    this.detectFaces();
+}
+async detectFaces() {
+      this.elRef.nativeElement.querySelector('video').addEventListener('play',() => {
+       this.canvas = createCanvasFromMedia(this.videoInput);
+       this.canvasEl = this.canvasRef?.nativeElement;
+       this.canvasEl.appendChild(this.canvas);
+       this.canvas.setAttribute('id', 'canvass');
+       this.canvas.setAttribute(
+          'style',`position: fixed;
+          top: 0;
+          left: 0;`
+       );
+       this.displaySize = {
+          width: this.videoInput.width,
+          height: this.videoInput.height,
+       };
+       matchCanvasDimensions(this.canvas, this.displaySize);
+       setInterval(async () => {
+         this.detection = await detectAllFaces(this.videoInput,  new  TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+         this.resizedDetections = resizeResults(
+            this.detection,
+            this.displaySize
+          );
+         this.canvas.getContext('2d').clearRect(0, 0,      this.canvas.width,this.canvas.height);
+         draw.drawDetections(this.canvas, this.resizedDetections);
+         draw.drawFaceLandmarks(this.canvas, this.resizedDetections);
+         draw.drawFaceExpressions(this.canvas, this.resizedDetections);
+      }, 100);
+      });
+}
+}

@@ -1,0 +1,169 @@
+<section class="vh-100">
+    <div class="align-items-center h-100 bg-light">
+      <div class="container h-100">
+        <div class="row justify-content-center align-items-center h-100">
+          <div class="col-12 col-md-9 col-lg-7 col-xl-6 d-flex justify-content-center">
+            <div class="card p-3 w-75 shadow">
+              <form [formGroup]="registerForm" (ngSubmit)="registerUser()">
+                <div class="text-center mb-12">
+                    <h2 class="text-primary fw-bolder mb-4">
+                        Sign Up
+                    </h2>
+                </div>
+
+                <!-- begin::Alert error-->
+                <ng-container *ngIf="isSignUpFailed">
+                  <div class="mb-lg-15 alert alert-danger">
+                      <div class="alert-text font-weight-bold">
+                          The register details are incorrect
+                      </div>
+                  </div>
+              </ng-container>
+              <!-- end::Alert error-->
+
+                <!-- firstname -->
+                <div class="form-outline mb-3 d-flex justify-content-center">
+                  <div class="w-75">
+                    <label for="fname" class="form-label fw-bolder text-dark fs-6">First Name:</label>
+                    <input type="text" name="fname" class="form-control" placeholder="fname" formControlName="fname"
+                      autocomplete="off"
+                      [ngClass]="{
+                        'is-invalid': registerForm.controls['fname'].invalid,
+                        'is-valid': registerForm.controls['fname'].valid
+                      }" />
+                    <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                        validation: 'required',
+                        message: 'Firstname is required',
+                        control: registerForm.controls['fname']
+                      }"></ng-container>
+                  </div>
+
+                </div>
+                <!-- firstname -->
+                <!-- lastname -->
+                <div class="form-outline mb-3 d-flex justify-content-center">
+                  <div class="w-75">
+                    <label for="lname" class="form-label fw-bolder text-dark fs-6">Last Name:</label>
+                    <input type="text" name="lname" class="form-control" placeholder="lname" formControlName="lname"
+                      autocomplete="off"
+                      [ngClass]="{
+                        'is-invalid': registerForm.controls['lname'].invalid,
+                        'is-valid': registerForm.controls['lname'].valid
+                      }" />
+                    <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                        validation: 'required',
+                        message: 'Lastname is required',
+                        control: registerForm.controls['lname']
+                      }"></ng-container>
+                  </div>
+                </div>
+                <!-- lastname -->
+                <!-- phone -->
+                <div class="form-outline mb-3 d-flex justify-content-center">
+                  <div class="w-75">
+                    <label for="phone" class="form-label fw-bolder text-dark fs-6">Phone:</label>
+                    <input type="text" name="phone" class="form-control" placeholder="phone" formControlName="phone"
+                      autocomplete="off"
+                      [ngClass]="{
+                        'is-invalid': registerForm.controls['phone'].invalid,
+                        'is-valid': registerForm.controls['phone'].valid
+                      }" />
+                    <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                        validation: 'required',
+                        message: 'Phone is required',
+                        control: registerForm.controls['phone']
+                      }"></ng-container>
+                  </div>
+                </div>
+                <!-- phone -->
+                <!-- Email -->
+                <div class="form-outline mb-3 d-flex justify-content-center">
+                  <div class="w-75">
+                    <label for="email" class="form-label fw-bolder text-dark fs-6">Email:</label>
+                    <input type="text" name="email" class="form-control" placeholder="email" formControlName="email"
+                      autocomplete="off"
+                      [ngClass]="{
+                        'is-invalid': registerForm.controls['email'].invalid,
+                        'is-valid': registerForm.controls['email'].valid
+                      }" />
+                    <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                        validation: 'required',
+                        message: 'Email is required',
+                        control: registerForm.controls['email']
+                      }"></ng-container>
+                  </div>
+                </div>
+                <!-- Email -->
+                <!-- Passsword -->
+                <div class="form-outline mb-3 d-flex justify-content-center">
+                  <div class="w-75">
+                    <label for="password" class="form-label fw-bolder text-dark fs-6">Password:</label>
+                    <input type="password" name="password" class="form-control" placeholder="password"
+                      formControlName="password" autocomplete="off"
+                      [ngClass]="{
+                        'is-invalid': registerForm.controls['password'].invalid,
+                        'is-valid': registerForm.controls['password'].valid
+                      }" />
+                    <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                        validation: 'required',
+                        message: 'Password is required',
+                        control: registerForm.controls['password']
+                      }"></ng-container>
+                  </div>
+                </div>
+                <!-- Password -->
+                <!-- confirm Passsword -->
+                <div class="form-outline mb-3 d-flex justify-content-center">
+                  <div class="w-75">
+                    <label  class="form-label fw-bolder text-dark fs-6">Confirm Password:</label>
+                    <input type="password" name="cPassword" class="form-control" placeholder="confirm password" name="cPassword" autocomplete="off" formControlName="cPassword"
+                      [ngClass]="{
+                          'is-invalid':registerForm.controls['cPassword'].invalid,
+                          'is-valid':registerForm.controls['cPassword'].valid
+                      }"
+                    />
+                    <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Confirm Password is required',
+                      control: registerForm.controls['cPassword']
+                    }"></ng-container>
+                      <ng-container *ngIf="
+                          registerForm.controls['cPassword'].errors &&
+                          registerForm.controls['cPassword'].errors['ConfirmPassword']">
+                          <div class="fv-plugins-message-container">
+                              <div class="fv-help-block">
+                                  'Passsword' and 'Confirm Password' didn't match.
+                              </div>
+                           </div>
+                      </ng-container>
+                  </div>
+                </div>
+                <!-- confirm Passsword -->
+                
+                <div class="d-flex justify-content-center">
+                  <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+                <div class="d-flex justify-content-center">
+                  <a type="submit" (click)="gotologin()" class="text-decoration-none color-info">back to sign-in</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+  <ng-template #formError let-control="control" let-message="message" let-validation="validation">
+    <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+      <div class="fv-plugins-message-container">
+        <div class="fv-help-block">
+          <span role="alert">
+            {{ message }}
+          </span>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+  
